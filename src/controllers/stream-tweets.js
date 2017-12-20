@@ -11,9 +11,20 @@ router.get('/stream', async (req, res) => {
       timeout_ms: 60 * 1000,
     });
 
-    const stream = T.stream('statuses/filter', { track: 'bitcoin, iota, litecoin' });
+    const stream = T.stream('statuses/filter', { track: ['@BaianaSystem', '#baianasystem', 'baianasystem', 'baiana system'], follow: '111329672' });
+
+    stream.on('connect', () => {
+      console.log('Connection attempted.');
+    });
+    stream.on('connected', () => {
+      console.log('Connection successful.');
+    });
     stream.on('tweet', (tweet) => {
       console.log(tweet);
+    });
+    stream.on('disconnect', (disconnectMessage) => {
+      console.log('Connection terminated');
+      throw disconnectMessage;
     });
 
     res.sendStatus(200);
